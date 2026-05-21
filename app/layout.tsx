@@ -42,7 +42,7 @@ export default function RootLayout({
         inter.variable,
       )}
     >
-      <body className='min-h-full flex flex-col bg-background pb-16'>
+      <body className='min-h-full flex flex-col bg-background pt-12 pb-16'>
         <BottomNavProvider>
           <TopHeader />
           <MarketTicker />

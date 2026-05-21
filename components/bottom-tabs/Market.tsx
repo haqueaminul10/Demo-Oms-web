@@ -2,6 +2,7 @@
 
 import MarketHeader from '../market-header';
 import MarketSummaryCard from '../market-summary';
+import TopLoosers from '../top-loosers';
 import TopStocks from '../top-stocks';
 
 export default function Market() {
@@ -10,6 +11,7 @@ export default function Market() {
       <MarketHeader />
       <MarketSummaryCard />
       <TopStocks />
+      <TopLoosers />
     </div>
   );
 }
