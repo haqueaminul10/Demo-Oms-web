@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useBottomNav } from '@/components/bottom-nav/provider';
 import {
   TrendingUp,
   ListPlus,
@@ -10,8 +10,8 @@ import {
 } from 'lucide-react';
 
 const BottomHeader = () => {
-  // Local state to manage which tab is currently selected
-  const [activeTab, setActiveTab] = useState('Market');
+  // Use shared bottom-nav state
+  const { activeTab, setActiveTab } = useBottomNav();
 
   const navigationItems = [
     { id: 'Market', label: 'Market', icon: TrendingUp },
@@ -31,7 +31,7 @@ const BottomHeader = () => {
           return (
             <button
               key={item.id}
-              onClick={() => setActiveTab(item.id)}
+              onClick={() => setActiveTab(item.id as any)}
               className='flex flex-col items-center justify-center gap-1 focus:outline-none'
             >
               {/* Dynamic color application based on active state */}

@@ -1,9 +1,12 @@
 import BottomHeader from '@/components/bottom-header/page';
 import TopHeader from '@/components/top-header/page';
+import { BottomNavProvider } from '@/components/bottom-nav/provider';
+import ContentRouter from '@/components/bottom-nav/ContentRouter';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono, Inter } from 'next/font/google';
 import './globals.css';
 import { cn } from '@/lib/utils';
+import MarketTicker from '@/components/market-ticker';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -40,9 +43,12 @@ export default function RootLayout({
       )}
     >
       <body className='min-h-full flex flex-col bg-background pb-16'>
-        <TopHeader />
-        {children}
-        <BottomHeader />
+        <BottomNavProvider>
+          <TopHeader />
+          <MarketTicker />
+          <ContentRouter>{children}</ContentRouter>
+          <BottomHeader />
+        </BottomNavProvider>
       </body>
     </html>
   );
