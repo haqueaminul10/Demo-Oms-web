@@ -84,7 +84,19 @@ const data: Row[] = [
   },
 ];
 
-function Sparkline({ points, className = '' }: { points: number[]; className?: string }) {
+type SparklineProps = {
+  points: number[];
+  className?: string;
+  isNegative: boolean;
+  isNeutral: boolean;
+};
+
+function Sparkline({
+  points,
+  className = '',
+  isNegative,
+  isNeutral,
+}: SparklineProps) {
   const min = Math.min(...points);
   const max = Math.max(...points);
   const width = 100;
@@ -96,62 +108,106 @@ function Sparkline({ points, className = '' }: { points: number[]; className?: s
     return { x, y };
   });
 
-  const pathD = scaled.map((pt, i) => `${i === 0 ? 'M' : 'L'} ${pt.x.toFixed(2)} ${pt.y.toFixed(2)}`).join(' ');
+  const pathD = scaled
+    .map(
+      (pt, i) => `${i === 0 ? 'M' : 'L'} ${pt.x.toFixed(2)} ${pt.y.toFixed(2)}`,
+    )
+    .join(' ');
   const areaD = `${pathD} L ${width} ${height} L 0 ${height} Z`;
 
-  const strokeColor = '#07202b';
-  const fillColor = '#07202b';
+  // Dynamic sparkline asset coloring mapped directly to performance values
+  const strokeColor = isNeutral
+    ? '#64748b'
+    : isNegative
+      ? '#ef4444'
+      : '#10b981';
+  const fillColor = strokeColor;
 
   return (
-    <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} className={className}>
-      <path d={areaD} fill={fillColor} opacity={0.06} />
-      <path d={pathD} fill="none" stroke={strokeColor} strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" />
+    <svg
+      width={width}
+      height={height}
+      viewBox={`0 0 ${width} ${height}`}
+      className={className}
+    >
+      <path d={areaD} fill={fillColor} opacity={0.08} />
+      <path
+        d={pathD}
+        fill='none'
+        stroke={strokeColor}
+        strokeWidth={2}
+        strokeLinecap='round'
+        strokeLinejoin='round'
+      />
     </svg>
   );
 }
 
 export default function MarketList() {
   return (
-    <div className='mt-3 w-full space-y-3'>
+    <div className='mt-3 w-full space-y-2 px-1'>
       {data.map((row) => {
-        const neg = row.changePercent < 0;
-        const changeBg = neg ? 'bg-[#ef4444]' : 'bg-[#10b981]';
+        const isNegative = row.changePercent < 0;
+        const isNeutral = row.changePercent === 0;
+
+        // Define clean performance color blocks
+        const changeBg = isNeutral
+          ? 'bg-slate-500'
+          : isNegative
+            ? 'bg-[#E11D48]'
+            : 'bg-[#007A48]';
+
         return (
-          <div
-            key={row.id}
-            className='rounded-xl border-2 border-[#06b6d4] p-1'
-          >
-            <div className='flex items-center justify-between gap-3 bg-[#071827] text-white rounded-md p-3'>
-              <div className='flex items-start gap-3'>
-                <div className='w-12 h-12 rounded-md bg-[#07202b] border border-[#0b2f3a] flex items-center justify-center text-sm font-semibold text-white'>
-                  {row.symbol}
-                return (
-                  <div key={row.id} className='rounded-xl border-2 border-transparent p-1'>
-                    <div className='flex items-center justify-between gap-3 bg-[#a0ecf1] text-black rounded-md p-3'>
+          <div key={row.id} className='w-full'>
+            <div className='flex items-center justify-between gap-3 bg-[#EAF7F9] text-slate-800 rounded-xl p-3 border border-[#D0EDF0] shadow-sm'>
+              {/* Left Column Section: Avatar Token Indicator & Stock Context Meta */}
+              <div className='flex items-start gap-2.5 min-w-0'>
+                <div className='w-11 h-11 rounded-lg bg-[#002D62] flex items-center justify-center text-xs font-black text-white uppercase tracking-wider shrink-0 shadow-sm'>
+                  {row.symbol.substring(0, 4)}
+                </div>
+
+                <div className='text-xs min-w-0 flex flex-col justify-center'>
+                  <div className='font-black text-slate-900 truncate tracking-wide text-sm leading-tight'>
+                    {row.name}
                   </div>
-                  <div className='text-xs text-[#8b98a1]'>
-                    TR: {row.trVolume} | TRD: {row.trd}
+                  <div className='text-[11px] font-bold text-slate-500 mt-0.5'>
+                    H: <span className='text-slate-700'>{row.high}</span> | L:{' '}
+                    <span className='text-slate-700'>{row.low}</span>
+                  </div>
+                  <div className='text-[10px] font-medium text-slate-400 mt-0.5 truncate'>
+                    Vol: {row.trVolume} • Trd: {row.trd}
                   </div>
                 </div>
               </div>
 
-                          <div className='text-xs text-[#0f172a]'>
-                            H: {row.high} L: {row.low}
-                          </div>
-                          <div className='text-xs text-[#0f172a]'>
-                            TR: {row.trVolume} | TRD: {row.trd}
-                          </div>
-                  className={`text-right rounded-lg px-3 py-2 shadow-sm ${changeBg}`}
-                >
-                  <div className='text-sm font-medium'>{row.last}</div>
-                  <div className='text-xs text-white/90'>
-                        <div className='w-36 h-10 flex items-center justify-center'>
-                          <Sparkline points={row.spark} className='' />
-                        </div>
+              {/* Right Column Section: Data Graphing Visuals & Value Badges */}
+              <div className='flex items-center gap-3 shrink-0'>
+                {/* Embedded Reactive Vector Waveform */}
+                <div className='w-24 h-9 flex items-center justify-center bg-white/40 rounded px-1 border border-slate-200/40'>
+                  <Sparkline
+                    points={row.spark}
+                    isNegative={isNegative}
+                    isNeutral={isNeutral}
+                  />
+                </div>
 
-                        <div className={`text-right rounded-lg px-3 py-2 shadow-sm ${changeBg}`}>
-                          <div className='text-sm font-medium text-white'>{row.last}</div>
-                          <div className='text-xs text-white/90'>
-                            {row.changePercent.toFixed(2)}%
-                          </div>
-                        </div>
+                {/* Performance Price Label pill */}
+                <div
+                  className={`w-[72px] text-center rounded-lg py-1.5 shadow-sm shrink-0 flex flex-col justify-center ${changeBg}`}
+                >
+                  <div className='text-xs font-black text-white tracking-tight leading-none'>
+                    {row.last.toFixed(2)}
+                  </div>
+                  <div className='text-[10px] font-black text-white/95 mt-1 leading-none tracking-tighter'>
+                    {isNeutral ? '' : isNegative ? '' : '+'}
+                    {row.changePercent.toFixed(2)}%
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
