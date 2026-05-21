@@ -22,8 +22,8 @@ const BottomHeader = () => {
   ];
 
   return (
-    <div className='w-full bg-white border-t border-slate-200 '>
-      <div className='grid grid-cols-5 w-full'>
+    <div className='fixed bottom-0 left-0 right-0 w-full bg-white border-t border-slate-200 z-50 h-16'>
+      <div className='grid grid-cols-5 w-full h-full items-center'>
         {navigationItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;

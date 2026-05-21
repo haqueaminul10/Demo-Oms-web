@@ -39,9 +39,11 @@ export default function RootLayout({
         inter.variable,
       )}
     >
-      <TopHeader />
-      <body className='min-h-full flex flex-col bg-background'>{children}</body>
-      <BottomHeader />
+      <body className='min-h-full flex flex-col bg-background pb-16'>
+        <TopHeader />
+        {children}
+        <BottomHeader />
+      </body>
     </html>
   );
 }

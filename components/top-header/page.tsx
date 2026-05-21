@@ -15,11 +15,13 @@ import {
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import MarketAnnouncement from '../market-announcement';
 
 const TopHeader = () => {
   const [isSearching, setIsSearching] = useState(false);
@@ -90,36 +92,8 @@ const TopHeader = () => {
               <Moon className='w-5 h-5' />
             </button>
 
-            {/* Notification Dropdown Menu */}
-            {/* Notification Dropdown Menu */}
-            <DropdownMenu>
-              {/* Removed asChild, added the aria-label here */}
-              <DropdownMenuTrigger aria-label='View notifications'>
-                <Bell className='w-5 h-5' />
-              </DropdownMenuTrigger>
-
-              <DropdownMenuContent align='end' className='w-64'>
-                <DropdownMenuLabel>Notifications</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem className='cursor-pointer'>
-                  <div className='flex flex-col gap-1'>
-                    <p className='text-sm font-medium'>Market Alert</p>
-                    <p className='text-xs text-muted-foreground'>
-                      DSE index dropped by 1.2% today.
-                    </p>
-                  </div>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem className='cursor-pointer'>
-                  <div className='flex flex-col gap-1'>
-                    <p className='text-sm font-medium'>System Update</p>
-                    <p className='text-xs text-muted-foreground'>
-                      Your watchlist has been updated.
-                    </p>
-                  </div>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            {/* Notification Dropdown Menu Implementation */}
+            <MarketAnnouncement />
 
             <button
               onClick={() => setIsSearching(true)}
